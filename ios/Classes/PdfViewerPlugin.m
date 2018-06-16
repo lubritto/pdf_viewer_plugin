@@ -54,19 +54,33 @@
         
         CGRect rc = [self parseRect:rect];
         
-        _webView = [[UIWebView alloc] initWithFrame:rc];
+        if (_webView == nil){
+            _webView = [[UIWebView alloc] initWithFrame:rc];
+            
+            NSURL *targetURL = [NSURL fileURLWithPath:path];
+            NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
+            [_webView loadRequest:request];
+            
+            [_viewController.view addSubview:_webView];
+        }
         
-        NSURL *targetURL = [NSURL fileURLWithPath:path];
-        NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
-        [_webView loadRequest:request];
-        
-        [_viewController.view addSubview:_webView];
-        
-        
+    }
+    else if ([@"close" isEqualToString:call.method]) {
+        [self closeWebView];
+        result(nil);
     }
     else {
         result(FlutterMethodNotImplemented);
     }
 }
+
+- (void)closeWebView {
+    if (_webView != nil) {
+        [_webView stopLoading];
+        [_webView removeFromSuperview];
+        _webView = nil;
+    }
+}
+
 
 @end

@@ -28,6 +28,7 @@ public class PdfViewerPlugin implements MethodCallHandler {
    */
   private Activity activity;
   private Result result;
+  private PDFView pdfView;
 
   private PdfViewerPlugin(Activity activity) {
     this.activity = activity;
@@ -70,7 +71,7 @@ public class PdfViewerPlugin implements MethodCallHandler {
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("getPdfViewer")) {
 
-      PDFView pdfView = new PDFView(activity, null);
+      pdfView = new PDFView(activity, null);
 
       FrameLayout.LayoutParams params = buildLayoutParams(call);
       activity.addContentView(pdfView, params);
@@ -86,6 +87,10 @@ public class PdfViewerPlugin implements MethodCallHandler {
               .defaultPage(0)
               .load();
 
+
+
+    } else if (call.method.equals("close")) {
+        pdfView = null;
     } else {
       result.notImplemented();
     }

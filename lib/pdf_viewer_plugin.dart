@@ -19,4 +19,7 @@ class PdfViewerPlugin {
       });
     return version;
   }
+
+  /// Will trigger the [onDestroy] event
+  static Future close() => _channel.invokeMethod("close");
 }
