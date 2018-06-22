@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
 
       writeCounter(await fetchPost());
       var x = await existsFile();
-      PdfViewerPlugin.getPdfViewer((await _localFile).path, 80, 200, 200);
+      PdfViewerPlugin.getPdfViewer((await _localFile).path, 80.0, 200.0, 200.0);
 
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';

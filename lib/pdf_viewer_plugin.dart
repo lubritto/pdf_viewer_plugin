@@ -7,7 +7,7 @@ class PdfViewerPlugin {
   static const MethodChannel _channel =
       const MethodChannel('pdf_viewer_plugin');
 
-  static Future<String> getPdfViewer(String path, int top, int width, int height) async {
+  static Future<String> getPdfViewer(String path, double top, double width, double height) async {
     final String version = await _channel.invokeMethod('getPdfViewer', <String, dynamic>{
         'path': path,
         'rect': {
