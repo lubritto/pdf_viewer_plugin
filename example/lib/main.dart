@@ -88,6 +88,10 @@ class _MyAppState extends State<MyApp> {
                 child: new Text("Clique aqui"),
                 onPressed: initPlatformState
               ),
+              new RaisedButton(
+                  child: new Text("close"),
+                  onPressed: () { PdfViewerPlugin.close(); }
+              ),
           ],) 
         ),
       ),

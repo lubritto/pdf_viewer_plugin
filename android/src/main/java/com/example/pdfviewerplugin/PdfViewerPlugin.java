@@ -4,6 +4,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 
 import android.graphics.Point;
 import android.view.Display;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.io.File;
@@ -26,6 +27,8 @@ public class PdfViewerPlugin implements MethodCallHandler {
   /**
    * Plugin registration.
    */
+
+  static MethodChannel channel;
   private Activity activity;
   private Result result;
   private PDFView pdfView;
@@ -37,7 +40,7 @@ public class PdfViewerPlugin implements MethodCallHandler {
   private ArrayList<String> docPaths = new ArrayList<>();
 
   public static void registerWith(Registrar registrar) {
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "pdf_viewer_plugin");
+    channel = new MethodChannel(registrar.messenger(), "pdf_viewer_plugin");
     PdfViewerPlugin plugin = new PdfViewerPlugin(registrar.activity());
     channel.setMethodCallHandler(plugin);
   }
@@ -67,6 +70,19 @@ public class PdfViewerPlugin implements MethodCallHandler {
     return (int) (dp * scale + 0.5f);
   }
 
+  private void close(MethodCall call, MethodChannel.Result result) {
+    if (pdfView != null) {
+      ViewGroup vg = (ViewGroup) (pdfView.getParent());
+      vg.removeView(pdfView);
+    }
+
+    if (result != null) {
+      result.success(null);
+    }
+
+    channel.invokeMethod("onDestroy", null);
+  }
+
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("getPdfViewer")) {
@@ -88,8 +104,8 @@ public class PdfViewerPlugin implements MethodCallHandler {
               .load();
 
 
-
     } else if (call.method.equals("close")) {
+      close(call, result);
         pdfView = null;
     } else {
       result.notImplemented();
