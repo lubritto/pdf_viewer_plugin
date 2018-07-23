@@ -2,7 +2,7 @@ name: pdf_viewer_plugin
 description: A new Flutter plugin to view pdfs
 version: 0.0.4
 author: Lucas Britto <l_demello@hotmail.com>
-homepage: https://github.com/lubritto/Flutter_Medias_Picker
+homepage: https://github.com/lubritto/Pdf_Viewer_Plugin
 
 dependencies:
   flutter:
