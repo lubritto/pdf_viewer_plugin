@@ -56,12 +56,15 @@
         
         if (_webView == nil){
             _webView = [[UIWebView alloc] initWithFrame:rc];
+            _webView.scalesPageToFit = true;
             
             NSURL *targetURL = [NSURL fileURLWithPath:path];
             NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
             [_webView loadRequest:request];
             
             [_viewController.view addSubview:_webView];
+
+            result(nil);
         }
         
     }

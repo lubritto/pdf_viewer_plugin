@@ -103,7 +103,7 @@ public class PdfViewerPlugin implements MethodCallHandler {
               .defaultPage(0)
               .load();
 
-
+      result.success(null);
     } else if (call.method.equals("close")) {
       close(call, result);
         pdfView = null;
