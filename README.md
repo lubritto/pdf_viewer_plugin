@@ -123,5 +123,5 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
-[Feedback welcome](https://github.com/flutter/flutter/issues) and
-[Pull Requests](https://github.com/flutter/plugins/pulls) are most welcome!
+[Feedback welcome](https://github.com/lubritto/Pdf_Viewer_Plugin/issues) and
+[Pull Requests](https://github.com/lubritto/Pdf_Viewer_Plugin/pulls) are most welcome!
