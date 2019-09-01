@@ -3,21 +3,19 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
-
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => new _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  String path;
 
   @override
   initState() {
@@ -32,67 +30,64 @@ class _MyAppState extends State<MyApp> {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return new File('$path/teste.pdf');
+    return File('$path/teste.pdf');
   }
 
   Future<File> writeCounter(Uint8List stream) async {
-  final file = await _localFile;
- 
-  // Write the file
-  return file.writeAsBytes(stream);
-}
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsBytes(stream);
+  }
 
   Future<bool> existsFile() async {
-  final file = await _localFile;
-  return file.exists();
-}
+    final file = await _localFile;
+    return file.exists();
+  }
+
   Future<Uint8List> fetchPost() async {
-  final response =
-      await http.get('https://expoforest.com.br/wp-content/uploads/2017/05/exemplo.pdf');
-  final responseJson = response.bodyBytes;
+    final response = await http.get(
+        'https://expoforest.com.br/wp-content/uploads/2017/05/exemplo.pdf');
+    final responseJson = response.bodyBytes;
 
-  return responseJson;
-}
+    return responseJson;
+  }
 
-  initPlatformState() async {
-    String platformVersion;
-    try {
+  loadPdf() async {
+    writeCounter(await fetchPost());
+    await existsFile();
+    path = (await _localFile).path;
 
-      writeCounter(await fetchPost());
-      var x = await existsFile();
-      PdfViewerPlugin.getPdfViewer((await _localFile).path, 80.0, 200.0, 200.0);
+    if (!mounted) return;
 
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    if (!mounted)
-      return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Plugin example app'),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Plugin example app'),
         ),
-        body: new Center(
-          child: new Column(children: <Widget>[
-              new Text("Hello"),
-              new RaisedButton(
-                child: new Text("Clique aqui"),
-                onPressed: initPlatformState
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              if (path != null)
+                Container(
+                  height: 300.0,
+                  child: PdfViewer(
+                    filePath: path,
+                  ),
+                )
+              else
+                Text("Pdf is not Loaded"),
+              RaisedButton(
+                child: Text("Load pdf"),
+                onPressed: loadPdf,
               ),
-              new RaisedButton(
-                  child: new Text("close"),
-                  onPressed: () { PdfViewerPlugin.close(); }
-              ),
-          ],) 
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 name: pdf_viewer_plugin
-description: A new Flutter plugin to view pdfs.
-version: 0.1.0
+description: A Flutter plugin to display PDFs (enter to some gifs).
+version: 1.0.0
 author: Lucas Britto <l_demello@hotmail.com>
 homepage: https://github.com/lubritto/Pdf_Viewer_Plugin
 
@@ -14,4 +14,4 @@ flutter:
     pluginClass: PdfViewerPlugin
 
 environment:
-  sdk: ">=1.19.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"

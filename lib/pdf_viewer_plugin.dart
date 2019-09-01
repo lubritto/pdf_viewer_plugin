@@ -1,25 +1,63 @@
 import 'dart:async';
-import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class PdfViewerPlugin {
-  static const MethodChannel _channel =
-      const MethodChannel('pdf_viewer_plugin');
+typedef void PdfViewerCreatedCallback(PdfViewerController controller);
 
-  static Future<String> getPdfViewer(String path, double top, double width, double height) async {
-    final String version = await _channel.invokeMethod('getPdfViewer', <String, dynamic>{
-        'path': path,
-        'rect': {
-          "left": 0,
-          "top": top,
-          "width": width,
-          "height": height
-        }
-      });
-    return version;
+class PdfViewer extends StatefulWidget {
+  const PdfViewer({
+    Key key,
+    this.filePath,
+    this.onPdfViewerCreated,
+  }) : super(key: key);
+
+  final String filePath;
+  final PdfViewerCreatedCallback onPdfViewerCreated;
+
+  @override
+  _PdfViewerState createState() => _PdfViewerState();
+}
+
+class _PdfViewerState extends State<PdfViewer> {
+  @override
+  Widget build(BuildContext context) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return AndroidView(
+        viewType: 'pdf_viewer_plugin',
+        creationParams: <String, dynamic>{
+          'filePath': widget.filePath,
+        },
+        creationParamsCodec: StandardMessageCodec(),
+        onPlatformViewCreated: _onPlatformViewCreated,
+      );
+    } else if(defaultTargetPlatform == TargetPlatform.iOS) {
+      return UiKitView(
+        viewType: 'pdf_viewer_plugin',
+        creationParams: <String, dynamic>{
+          'filePath': widget.filePath,
+        },
+        creationParamsCodec: const StandardMessageCodec(),
+        onPlatformViewCreated: _onPlatformViewCreated,
+      );
+    }
+
+    return Text(
+        '$defaultTargetPlatform is not yet supported by the pdf_viewer plugin');
   }
 
-  /// Will trigger the [onDestroy] event
-  static Future close() => _channel.invokeMethod("close");
+  void _onPlatformViewCreated(int id) {
+    if (widget.onPdfViewerCreated == null) {
+      return;
+    }
+    widget.onPdfViewerCreated(PdfViewerController._(id));
+  }
+}
+
+class PdfViewerController {
+  PdfViewerController._(int id)
+      : _channel = MethodChannel('pdf_viewer_plugin_$id');
+
+  final MethodChannel _channel;
 }
