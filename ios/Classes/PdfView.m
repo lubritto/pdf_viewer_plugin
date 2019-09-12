@@ -53,8 +53,12 @@
         WKWebViewConfiguration* configuration = [[WKWebViewConfiguration alloc] init];
         _webView = [[WKWebView alloc] initWithFrame:frame configuration:configuration];
         NSURL *targetURL = [NSURL fileURLWithPath:filePath];
-        NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
-        [_webView loadRequest:request];
+        if (@available(iOS 9.0, *)) {
+            [_webView loadFileURL:targetURL allowingReadAccessToURL:targetURL];
+        } else {
+            NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
+            [_webView loadRequest:request];
+        }
     }
     
   return self;
