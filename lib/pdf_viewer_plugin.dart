@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-typedef void PdfViewerCreatedCallback(PdfViewerController controller);
+typedef void PdfViewerCreatedCallback();
 
 class PdfViewer extends StatefulWidget {
   const PdfViewer({
@@ -32,7 +30,7 @@ class _PdfViewerState extends State<PdfViewer> {
         creationParamsCodec: StandardMessageCodec(),
         onPlatformViewCreated: _onPlatformViewCreated,
       );
-    } else if(defaultTargetPlatform == TargetPlatform.iOS) {
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
         viewType: 'pdf_viewer_plugin',
         creationParams: <String, dynamic>{
@@ -51,13 +49,6 @@ class _PdfViewerState extends State<PdfViewer> {
     if (widget.onPdfViewerCreated == null) {
       return;
     }
-    widget.onPdfViewerCreated(PdfViewerController._(id));
+    widget.onPdfViewerCreated();
   }
-}
-
-class PdfViewerController {
-  PdfViewerController._(int id)
-      : _channel = MethodChannel('pdf_viewer_plugin_$id');
-
-  final MethodChannel _channel;
 }

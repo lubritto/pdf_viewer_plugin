@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,11 +16,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String path;
-
-  @override
-  initState() {
-    super.initState();
-  }
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -53,8 +48,8 @@ class _MyAppState extends State<MyApp> {
     return responseJson;
   }
 
-  loadPdf() async {
-    writeCounter(await fetchPost());
+  void loadPdf() async {
+    await writeCounter(await fetchPost());
     await existsFile();
     path = (await _localFile).path;
 
