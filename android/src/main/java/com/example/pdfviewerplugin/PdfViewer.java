@@ -1,7 +1,10 @@
 package com.example.pdfviewerplugin;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.link.LinkHandler;
+import com.github.barteksc.pdfviewer.model.LinkTapEvent;
 
+import android.content.Intent;
 import android.content.Context;
 import android.view.View;
 
@@ -18,11 +21,11 @@ import io.flutter.plugin.platform.PlatformView;
 public class PdfViewer implements PlatformView, MethodCallHandler {
     private PDFView pdfView;
     private String filePath;
+    LinkHandler linkHandler = new MyLinktHandler();
 
     PdfViewer(Context context, BinaryMessenger messenger, int id, Map<String, Object> args) {
         MethodChannel methodChannel = new MethodChannel(messenger, "pdf_viewer_plugin_" + id);
-        methodChannel.setMethodCallHandler(this);
-
+        methodChannel.setMethodCallHandler(this);;
         pdfView = new PDFView(context, null);
 
         if (!args.containsKey("filePath")) {
@@ -31,6 +34,7 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
 
         filePath = (String)args.get("filePath");
         loadPdfView();
+
     }
 
     @Override
@@ -48,6 +52,7 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
                 .swipeHorizontal(false)
                 .enableDoubletap(true)
                 .defaultPage(0)
+                .linkHandler(linkHandler)
                 .load();
     }
 
@@ -58,4 +63,12 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
 
     @Override
     public void dispose() {}
+}
+
+class MyLinktHandler implements LinkHandler {
+
+    @Override
+    public void handleLinkEvent(LinkTapEvent event) {
+        event.getLink().getUri();
+    }
 }
