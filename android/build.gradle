@@ -31,5 +31,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+    implementation('com.github.barteksc:android-pdf-viewer:2.8.2') {
+        force = true
+    }
 }
