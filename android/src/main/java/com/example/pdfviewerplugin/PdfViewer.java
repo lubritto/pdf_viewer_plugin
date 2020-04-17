@@ -6,6 +6,7 @@ import com.github.barteksc.pdfviewer.model.LinkTapEvent;
 
 import android.content.Intent;
 import android.content.Context;
+import android.net.Uri;
 import android.view.View;
 
 import java.io.File;
@@ -18,17 +19,18 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.platform.PlatformView;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 public class PdfViewer implements PlatformView, MethodCallHandler {
     private PDFView pdfView;
     private String filePath;
-    LinkHandler linkHandler = new MyLinktHandler();
+    LinkHandler linkHandler;
 
     PdfViewer(Context context, BinaryMessenger messenger, int id, Map<String, Object> args) {
         MethodChannel methodChannel = new MethodChannel(messenger, "pdf_viewer_plugin_" + id);
         methodChannel.setMethodCallHandler(this);
-        ;
         pdfView = new PDFView(context, null);
-
+        linkHandler = new MyLinktHandler(context);
         if (!args.containsKey("filePath")) {
             return;
         }
@@ -68,6 +70,11 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
 }
 
 class MyLinktHandler implements LinkHandler {
+    Context context;
+
+    public MyLinktHandler(Context context) {
+        this.context = context;
+    }
 
     @Override
     public void handleLinkEvent(LinkTapEvent event) {
@@ -76,6 +83,6 @@ class MyLinktHandler implements LinkHandler {
         i.setData(Uri.parse(url));
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
+        startActivity(context, i, null);
     }
 }
