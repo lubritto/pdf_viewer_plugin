@@ -22,7 +22,8 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
     PdfViewer(Context context, BinaryMessenger messenger, int id, Map<String, Object> args) {
         MethodChannel methodChannel = new MethodChannel(messenger, "pdf_viewer_plugin_" + id);
         methodChannel.setMethodCallHandler(this);
-
+        Intent i = new Intent(this, Wakeup.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         pdfView = new PDFView(context, null);
 
         if (!args.containsKey("filePath")) {
