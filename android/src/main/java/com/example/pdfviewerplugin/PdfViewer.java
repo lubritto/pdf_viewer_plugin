@@ -25,14 +25,15 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
 
     PdfViewer(Context context, BinaryMessenger messenger, int id, Map<String, Object> args) {
         MethodChannel methodChannel = new MethodChannel(messenger, "pdf_viewer_plugin_" + id);
-        methodChannel.setMethodCallHandler(this);;
+        methodChannel.setMethodCallHandler(this);
+        ;
         pdfView = new PDFView(context, null);
 
         if (!args.containsKey("filePath")) {
             return;
         }
 
-        filePath = (String)args.get("filePath");
+        filePath = (String) args.get("filePath");
         loadPdfView();
 
     }
@@ -62,13 +63,19 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
     }
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+    }
 }
 
 class MyLinktHandler implements LinkHandler {
 
     @Override
     public void handleLinkEvent(LinkTapEvent event) {
-        event.getLink().getUri();
+        String url = event.getLink().getUri();
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 }
