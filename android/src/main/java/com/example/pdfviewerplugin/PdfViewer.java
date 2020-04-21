@@ -3,6 +3,7 @@ package com.example.pdfviewerplugin;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.link.LinkHandler;
 import com.github.barteksc.pdfviewer.model.LinkTapEvent;
+import com.github.barteksc.pdfviewer.util.FitPolicy;
 
 import android.content.Intent;
 import android.content.Context;
@@ -55,7 +56,7 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
                 .swipeHorizontal(false)
                 .enableDoubletap(true)
                 .defaultPage(0)
-                .linkHandler(linkHandler)
+                .linkHandler(linkHandler).enableAntialiasing(true).spacing(0).autoSpacing(false).pageSnap(true).pageFling(true)
                 .load();
     }
 
