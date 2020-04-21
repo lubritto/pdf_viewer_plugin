@@ -22,13 +22,16 @@ class _PdfViewerState extends State<PdfViewer> {
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
-        viewType: 'pdf_viewer_plugin',
-        creationParams: <String, dynamic>{
-          'filePath': widget.filePath,
-        },
-        creationParamsCodec: StandardMessageCodec(),
-        onPlatformViewCreated: _onPlatformViewCreated,
+      return Container(
+        color: Colors.white,
+        child: AndroidView(
+          viewType: 'pdf_viewer_plugin',
+          creationParams: <String, dynamic>{
+            'filePath': widget.filePath,
+          },
+          creationParamsCodec: StandardMessageCodec(),
+          onPlatformViewCreated: _onPlatformViewCreated,
+        ),
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
