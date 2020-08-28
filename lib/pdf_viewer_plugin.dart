@@ -5,14 +5,20 @@ import 'package:flutter/services.dart';
 typedef void PdfViewerCreatedCallback();
 
 class PdfViewer extends StatefulWidget {
+  final int spacing;
+  final String filePath;
+  final String uri;
+  final String backgroundColor;
+  final PdfViewerCreatedCallback onPdfViewerCreated;
+
   const PdfViewer({
     Key key,
     this.filePath,
+    this.spacing,
     this.onPdfViewerCreated,
+    this.backgroundColor,
+    this.uri,
   }) : super(key: key);
-
-  final String filePath;
-  final PdfViewerCreatedCallback onPdfViewerCreated;
 
   @override
   _PdfViewerState createState() => _PdfViewerState();
@@ -26,6 +32,9 @@ class _PdfViewerState extends State<PdfViewer> {
         viewType: 'pdf_viewer_plugin',
         creationParams: <String, dynamic>{
           'filePath': widget.filePath,
+          'spacing': widget.spacing,
+          'backgroundColor': widget.backgroundColor,
+          'uri': widget.uri,
         },
         creationParamsCodec: StandardMessageCodec(),
         onPlatformViewCreated: _onPlatformViewCreated,

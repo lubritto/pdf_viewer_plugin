@@ -41,8 +41,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<Uint8List> fetchPost() async {
+    // final response = await http.get(
+    //     'https://expoforest.com.br/wp-content/uploads/2017/05/exemplo.pdf');
     final response = await http.get(
-        'https://expoforest.com.br/wp-content/uploads/2017/05/exemplo.pdf');
+        'https://piktochart.com/wp-content/uploads/2016/05/Piktochart-e-book-2-Create-Your-First-Infographic-In-15-Minutes.pdf');
     final responseJson = response.bodyBytes;
 
     return responseJson;
@@ -69,10 +71,15 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: <Widget>[
               if (path != null)
-                Container(
-                  height: 300.0,
-                  child: PdfViewer(
-                    filePath: path,
+                Expanded(
+                  child: Container(
+                    color: Colors.black,
+                    child: PdfViewer(
+                      filePath: path,
+                      spacing: 10,
+                      // uri:
+                      //     'https://piktochart.com/wp-content/uploads/2016/05/Piktochart-e-book-2-Create-Your-First-Infographic-In-15-Minutes.pdf',
+                    ),
                   ),
                 )
               else
@@ -80,6 +87,9 @@ class _MyAppState extends State<MyApp> {
               RaisedButton(
                 child: Text("Load pdf"),
                 onPressed: loadPdf,
+                // onPressed: () {
+                //   setState(() {});
+                // },
               ),
             ],
           ),
