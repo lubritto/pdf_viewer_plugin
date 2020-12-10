@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf_viewer_plugin/src/android_pdf_viewer.dart';
+import 'package:pdf_viewer_plugin/src/cupertino_pfd_viewer.dart';
 import 'package:pdf_viewer_plugin/src/pdf_viewer_method_channel.dart';
 
 typedef void PdfViewerCreatedCallback();
@@ -78,20 +79,20 @@ class PdfView extends StatefulWidget {
 
   static PdfViewerPlatform _platform;
 
-  /// Sets a custom [WebViewPlatform].
+  /// Sets a custom [PdfViewerPlatform].
   ///
-  /// This property can be set to use a custom platform implementation for WebViews.
+  /// This property can be set to use a custom platform implementation for PdfViews.
   ///
-  /// Setting `platform` doesn't affect [WebView]s that were already created.
+  /// Setting `platform` doesn't affect [PdfView]s that were already created.
   ///
-  /// The default value is [AndroidWebView] on Android and [CupertinoWebView] on iOS.
+  /// The default value is [AndroidPdfViewer] on Android and [CupertinoPdfViewer] on iOS.
   static set platform(PdfViewerPlatform platform) {
     _platform = platform;
   }
 
   /// The WebView platform that's used by this WebView.
   ///
-  /// The default value is [AndroidWebView] on Android and [CupertinoWebView] on iOS.
+  /// The default value is [AndroidPdfViewer] on Android and [CupertinoPdfViewer] on iOS.
   static PdfViewerPlatform get platform {
     if (_platform == null) {
       switch (defaultTargetPlatform) {
@@ -99,7 +100,7 @@ class PdfView extends StatefulWidget {
           _platform = AndroidPdfViewer();
           break;
         case TargetPlatform.iOS:
-          // _platform = CupertinoWebView();
+          _platform = CupertinoPdfViewer();
           break;
         default:
           throw UnsupportedError(
