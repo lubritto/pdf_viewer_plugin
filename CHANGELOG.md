@@ -1,3 +1,9 @@
+# Changelog
+
+## [1.0.1] - 10/12/2020
+
+* Fix a bug when opening the pdf
+
 ## [1.0.0+2] - 17/09/2019
 
 * Remove unused codes and improve description
