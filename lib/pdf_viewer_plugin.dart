@@ -1,54 +1,152 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:pdf_viewer_plugin/src/android_pdf_viewer.dart';
+import 'package:pdf_viewer_plugin/src/pdf_viewer_method_channel.dart';
 
 typedef void PdfViewerCreatedCallback();
 
-class PdfViewer extends StatefulWidget {
-  const PdfViewer({
-    Key key,
-    this.filePath,
-    this.onPdfViewerCreated,
-  }) : super(key: key);
+class CreationParams {
+  CreationParams({
+    this.path,
+  });
 
-  final String filePath;
-  final PdfViewerCreatedCallback onPdfViewerCreated;
+  final String path;
 
   @override
-  _PdfViewerState createState() => _PdfViewerState();
+  String toString() {
+    return '$runtimeType(path: $path)';
+  }
 }
 
-class _PdfViewerState extends State<PdfViewer> {
+abstract class PdfViewerPlatform {
+  Widget build({
+    BuildContext context,
+    CreationParams creationParams,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+  });
+}
+
+class SurfaceAndroidPdfViewer extends AndroidPdfViewer {
+  @override
+  Widget build({
+    BuildContext context,
+    CreationParams creationParams,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+  }) {
+    return PlatformViewLink(
+      viewType: 'pdf_viewer_plugin',
+      surfaceFactory: (
+        BuildContext context,
+        PlatformViewController controller,
+      ) {
+        return AndroidViewSurface(
+          controller: controller,
+          gestureRecognizers: gestureRecognizers ??
+              const <Factory<OneSequenceGestureRecognizer>>{},
+          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+        );
+      },
+      onCreatePlatformView: (PlatformViewCreationParams params) {
+        return PlatformViewsService.initSurfaceAndroidView(
+          id: params.id,
+          viewType: 'pdf_viewer_plugin',
+          layoutDirection: TextDirection.rtl,
+          creationParams: MethodChannelPdfViewerPlatform.creationParamsToMap(
+            creationParams,
+          ),
+          creationParamsCodec: const StandardMessageCodec(),
+        )
+          ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
+          ..addOnPlatformViewCreatedListener((int id) {})
+          ..create();
+      },
+    );
+  }
+}
+
+class PdfView extends StatefulWidget {
+  /// Creates a new web view.
+  const PdfView({
+    Key key,
+    this.path,
+    this.gestureRecognizers,
+    this.gestureNavigationEnabled = false,
+  }) : super(key: key);
+
+  static PdfViewerPlatform _platform;
+
+  /// Sets a custom [WebViewPlatform].
+  ///
+  /// This property can be set to use a custom platform implementation for WebViews.
+  ///
+  /// Setting `platform` doesn't affect [WebView]s that were already created.
+  ///
+  /// The default value is [AndroidWebView] on Android and [CupertinoWebView] on iOS.
+  static set platform(PdfViewerPlatform platform) {
+    _platform = platform;
+  }
+
+  /// The WebView platform that's used by this WebView.
+  ///
+  /// The default value is [AndroidWebView] on Android and [CupertinoWebView] on iOS.
+  static PdfViewerPlatform get platform {
+    if (_platform == null) {
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.android:
+          _platform = AndroidPdfViewer();
+          break;
+        case TargetPlatform.iOS:
+          // _platform = CupertinoWebView();
+          break;
+        default:
+          throw UnsupportedError(
+              "Trying to use the default webview implementation for $defaultTargetPlatform but there isn't a default one");
+      }
+    }
+    return _platform;
+  }
+
+  /// Which gestures should be consumed by the web view.
+  ///
+  /// It is possible for other gesture recognizers to be competing with the web view on pointer
+  /// events, e.g if the web view is inside a [ListView] the [ListView] will want to handle
+  /// vertical drags. The web view will claim gestures that are recognized by any of the
+  /// recognizers on this list.
+  ///
+  /// When this set is empty or null, the web view will only handle pointer events for gestures that
+  /// were not claimed by any other gesture recognizer.
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+
+  /// The initial path to load.
+  final String path;
+
+  /// A Boolean value indicating whether horizontal swipe gestures will trigger back-forward list navigations.
+  ///
+  /// This only works on iOS.
+  ///
+  /// By default `gestureNavigationEnabled` is false.
+  final bool gestureNavigationEnabled;
+
+  @override
+  State<StatefulWidget> createState() => _PdfViewState();
+}
+
+class _PdfViewState extends State<PdfView> {
   @override
   Widget build(BuildContext context) {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
-        viewType: 'pdf_viewer_plugin',
-        creationParams: <String, dynamic>{
-          'filePath': widget.filePath,
-        },
-        creationParamsCodec: StandardMessageCodec(),
-        onPlatformViewCreated: _onPlatformViewCreated,
-      );
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return UiKitView(
-        viewType: 'pdf_viewer_plugin',
-        creationParams: <String, dynamic>{
-          'filePath': widget.filePath,
-        },
-        creationParamsCodec: const StandardMessageCodec(),
-        onPlatformViewCreated: _onPlatformViewCreated,
-      );
-    }
-
-    return Text(
-        '$defaultTargetPlatform is not yet supported by the pdf_viewer plugin');
+    return PdfView.platform.build(
+      context: context,
+      gestureRecognizers: widget.gestureRecognizers,
+      creationParams: _creationParamsfromWidget(widget),
+    );
   }
+}
 
-  void _onPlatformViewCreated(int id) {
-    if (widget.onPdfViewerCreated == null) {
-      return;
-    }
-    widget.onPdfViewerCreated();
-  }
+CreationParams _creationParamsfromWidget(PdfView widget) {
+  return CreationParams(
+    path: widget.path,
+  );
 }

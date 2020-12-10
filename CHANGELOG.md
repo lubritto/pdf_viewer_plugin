@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] - 10/12/2020
+
+* Update to use the new platform view system
+
 ## [1.0.1] - 10/12/2020
 
 * Fix a bug when opening the pdf

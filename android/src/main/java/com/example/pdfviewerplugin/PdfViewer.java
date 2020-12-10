@@ -16,21 +16,25 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.platform.PlatformView;
 
 public class PdfViewer implements PlatformView, MethodCallHandler {
+    private final MethodChannel methodChannel;
     private PDFView pdfView;
     private String filePath;
 
-    PdfViewer(Context context, BinaryMessenger messenger, int id, Map<String, Object> args) {
-        MethodChannel methodChannel = new MethodChannel(messenger, "pdf_viewer_plugin_" + id);
+    PdfViewer(final Context context,
+              BinaryMessenger messenger,
+              int id,
+              Map<String, Object> params,
+              View containerView) {
+        methodChannel = new MethodChannel(messenger, "pdf_viewer_plugin_" + id);
         methodChannel.setMethodCallHandler(this);
-        Intent i = new Intent(this, Wakeup.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         pdfView = new PDFView(context, null);
 
-        if (!args.containsKey("filePath")) {
+        if (!params.containsKey("filePath")) {
             return;
         }
 
-        filePath = (String)args.get("filePath");
+        filePath = (String)params.get("filePath");
         loadPdfView();
     }
 
@@ -57,6 +61,11 @@ public class PdfViewer implements PlatformView, MethodCallHandler {
         return pdfView;
     }
 
+
     @Override
-    public void dispose() {}
+    public void dispose() {
+        methodChannel.setMethodCallHandler(null);
+        pdfView.invalidate();
+
+    }
 }

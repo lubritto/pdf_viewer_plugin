@@ -7,7 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -71,8 +73,8 @@ class _MyAppState extends State<MyApp> {
               if (path != null)
                 Container(
                   height: 300.0,
-                  child: PdfViewer(
-                    filePath: path,
+                  child: PdfView(
+                    path: path,
                   ),
                 )
               else
