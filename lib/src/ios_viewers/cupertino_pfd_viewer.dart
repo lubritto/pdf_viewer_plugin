@@ -17,7 +17,8 @@ class CupertinoPdfViewer implements PdfViewerPlatform {
       viewType: 'pdf_viewer_plugin',
       onPlatformViewCreated: (int id) {},
       gestureRecognizers: gestureRecognizers,
-      creationParams: MethodChannelPdfViewerPlatform.creationParamsToMap(creationParams!),
+      creationParams:
+          MethodChannelPdfViewerPlatform.creationParamsToMap(creationParams!),
       creationParamsCodec: const StandardMessageCodec(),
     );
   }

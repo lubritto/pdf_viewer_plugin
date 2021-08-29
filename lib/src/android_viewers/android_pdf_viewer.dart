@@ -29,7 +29,8 @@ class AndroidPdfViewer implements PdfViewerPlatform {
         onPlatformViewCreated: (int id) {},
         gestureRecognizers: gestureRecognizers,
         layoutDirection: TextDirection.rtl,
-        creationParams: MethodChannelPdfViewerPlatform.creationParamsToMap(creationParams!),
+        creationParams:
+            MethodChannelPdfViewerPlatform.creationParamsToMap(creationParams!),
         creationParamsCodec: const StandardMessageCodec(),
       ),
     );

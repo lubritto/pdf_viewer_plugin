@@ -7,7 +7,8 @@ import '../pdf_viewer_plugin.dart';
 class MethodChannelPdfViewerPlatform {
   /// Constructs an instance that will listen for pdf views broadcasting to the
   /// given [id]
-  MethodChannelPdfViewerPlatform(int id) : _channel = MethodChannel('pdf_viewer_plugin_$id') {
+  MethodChannelPdfViewerPlatform(int id)
+      : _channel = MethodChannel('pdf_viewer_plugin_$id') {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 
@@ -23,7 +24,8 @@ class MethodChannelPdfViewerPlatform {
   ///
   /// This is used for the `creationParams` argument of the platform views created by
   /// [AndroidPdfViewerBuilder] and [CupertinoPdfViewerBuilder].
-  static Map<String, dynamic> creationParamsToMap(CreationParams creationParams) {
+  static Map<String, dynamic> creationParamsToMap(
+      CreationParams creationParams) {
     return <String, dynamic>{
       'filePath': creationParams.path,
     };

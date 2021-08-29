@@ -23,7 +23,8 @@ class SurfaceAndroidPdfViewer extends AndroidPdfViewer {
       ) {
         return AndroidViewSurface(
           controller: controller as AndroidViewController,
-          gestureRecognizers: gestureRecognizers ?? const <Factory<OneSequenceGestureRecognizer>>{},
+          gestureRecognizers: gestureRecognizers ??
+              const <Factory<OneSequenceGestureRecognizer>>{},
           hitTestBehavior: PlatformViewHitTestBehavior.opaque,
         );
       },
@@ -32,7 +33,8 @@ class SurfaceAndroidPdfViewer extends AndroidPdfViewer {
           id: params.id,
           viewType: 'pdf_viewer_plugin',
           layoutDirection: TextDirection.rtl,
-          creationParams: MethodChannelPdfViewerPlatform.creationParamsToMap(creationParams!),
+          creationParams: MethodChannelPdfViewerPlatform.creationParamsToMap(
+              creationParams!),
           creationParamsCodec: const StandardMessageCodec(),
         )
           ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)

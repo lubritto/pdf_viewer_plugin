@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.0.1
+
+* Update docs
+
 ## 2.0.0
 
 * Migrate to null safety
+* Fixed android hot reload issue
 
 ## 1.1.1
 

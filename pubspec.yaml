@@ -1,6 +1,6 @@
 name: pdf_viewer_plugin
 description: A Flutter plugin for IOS and Android providing a simple way to display local file PDFs (enter to see some gifs).
-version: 2.0.0
+version: 2.0.1
 homepage: https://github.com/lubritto/pdf_viewer_plugin
 
 environment:
