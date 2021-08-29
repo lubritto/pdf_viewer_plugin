@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.0] - 27/07/2021
+
+* Migrate to null safety
+
 ## [1.1.1] - 10/12/2020
 
 * Fix IOS

@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String path;
+  String? path;
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -44,8 +44,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<Uint8List> fetchPost() async {
-    final response = await http.get(
-        'https://expoforest.com.br/wp-content/uploads/2017/05/exemplo.pdf');
+    final response = await http.get(Uri.parse('https://expoforest.com.br/wp-content/uploads/2017/05/exemplo.pdf'));
     final responseJson = response.bodyBytes;
 
     return responseJson;
@@ -80,7 +79,7 @@ class _MyAppState extends State<MyApp> {
                 )
               else
                 Text("Pdf is not Loaded"),
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Load pdf"),
                 onPressed: loadPdf,
               ),
