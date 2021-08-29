@@ -1,5 +1,6 @@
-group 'com.example.pdfviewerplugin'
-version '1.0-SNAPSHOT'
+group 'dev.britto.pdf_viewer_plugin'
+version '1.0'
+
 buildscript {
     repositories {
         google()
@@ -7,18 +8,21 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:4.1.0'
     }
 }
+
 rootProject.allprojects {
     repositories {
         google()
         jcenter()
     }
 }
+
 apply plugin: 'com.android.library'
+
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 16

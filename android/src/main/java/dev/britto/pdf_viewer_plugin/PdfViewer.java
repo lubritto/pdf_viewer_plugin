@@ -1,4 +1,4 @@
-package com.example.pdfviewerplugin;
+package dev.britto.pdf_viewer_plugin;
 
 import com.github.barteksc.pdfviewer.PDFView;
 

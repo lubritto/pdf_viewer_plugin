@@ -1,4 +1,4 @@
-package com.example.pdfviewerplugin;
+package dev.britto.pdf_viewer_plugin;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;

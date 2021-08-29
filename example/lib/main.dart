@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
                 if (pdfFlePath != null)
                   Expanded(
                     child: Container(
-                      child: PdfView(path: pdfFlePath),
+                      child: PdfView(path: pdfFlePath!),
                     ),
                   )
                 else

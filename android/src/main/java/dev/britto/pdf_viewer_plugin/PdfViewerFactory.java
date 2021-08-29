@@ -1,4 +1,4 @@
-package com.example.pdfviewerplugin;
+package dev.britto.pdf_viewer_plugin;
 
 import android.content.Context;
 import android.view.View;

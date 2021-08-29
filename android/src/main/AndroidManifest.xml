@@ -1,3 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.example.pdfviewerplugin">
+  package="dev.britto.pdf_viewer_plugin">
 </manifest>
