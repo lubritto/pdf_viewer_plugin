@@ -33,7 +33,7 @@ class PdfView extends StatefulWidget {
   /// Creates a new PdfView.
   const PdfView({
     Key? key,
-    this.path,
+    required this.path,
     this.gestureRecognizers,
     this.gestureNavigationEnabled = false,
   }) : super(key: key);
@@ -83,7 +83,7 @@ class PdfView extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
   /// The initial path to load.
-  final String? path;
+  final String path;
 
   /// A Boolean value indicating whether horizontal swipe gestures will trigger back-forward list navigations.
   ///
