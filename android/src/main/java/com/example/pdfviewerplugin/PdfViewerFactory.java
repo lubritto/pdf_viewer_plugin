@@ -5,6 +5,7 @@ import android.view.View;
 import java.util.Map;
 
 import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
@@ -24,6 +25,7 @@ public class PdfViewerFactory extends PlatformViewFactory {
     @Override
     public PlatformView create(Context context, int id, Object args) {
         Map<String, Object> params = (Map<String, Object>) args;
-        return new PdfViewer(context, messenger, id, params, containerView);
+        MethodChannel methodChannel = new MethodChannel(messenger, "pdf_viewer_plugin_" + id);
+        return new PdfViewer(context, methodChannel, params, containerView);
     }
 }

@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pdf_viewer_plugin/src/pdf_viewer_method_channel.dart';
 
-import '../pdf_viewer_plugin.dart';
+import '../../pdf_viewer_plugin.dart';
 
-/// Builds an Android pdfview.
+/// Builds an Android pdf view.
 ///
 /// This is used as the default implementation for [PdfView.platform] on Android. It uses
 /// an [AndroidView] to embed the pdfview in the widget hierarchy, and uses a method channel to
@@ -22,13 +22,6 @@ class AndroidPdfViewer implements PdfViewerPlatform {
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
     return GestureDetector(
-      // We prevent text selection by intercepting the long press event.
-      // This is a temporary stop gap due to issues with text selection on Android:
-      // https://github.com/flutter/flutter/issues/24585 - the text selection
-      // dialog is not responding to touch events.
-      // https://github.com/flutter/flutter/issues/24584 - the text selection
-      // handles are not showing.
-      // TODO(amirh): remove this when the issues above are fixed.
       onLongPress: () {},
       excludeFromSemantics: true,
       child: AndroidView(
@@ -36,8 +29,7 @@ class AndroidPdfViewer implements PdfViewerPlatform {
         onPlatformViewCreated: (int id) {},
         gestureRecognizers: gestureRecognizers,
         layoutDirection: TextDirection.rtl,
-        creationParams:
-            MethodChannelPdfViewerPlatform.creationParamsToMap(creationParams!),
+        creationParams: MethodChannelPdfViewerPlatform.creationParamsToMap(creationParams!),
         creationParamsCodec: const StandardMessageCodec(),
       ),
     );

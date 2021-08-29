@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:pdf_viewer_plugin/src/android_pdf_viewer.dart';
-import 'package:pdf_viewer_plugin/src/cupertino_pfd_viewer.dart';
-import 'package:pdf_viewer_plugin/src/pdf_viewer_method_channel.dart';
+import 'package:pdf_viewer_plugin/src/android_viewers/android_pdf_viewer.dart';
+import 'package:pdf_viewer_plugin/src/ios_viewers/cupertino_pfd_viewer.dart';
+
+export 'package:pdf_viewer_plugin/src/android_viewers/surface_android_pdf_viewer.dart';
 
 typedef void PdfViewerCreatedCallback();
 
@@ -30,46 +29,8 @@ abstract class PdfViewerPlatform {
   });
 }
 
-class SurfaceAndroidPdfViewer extends AndroidPdfViewer {
-  @override
-  Widget build({
-    BuildContext? context,
-    CreationParams? creationParams,
-    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-  }) {
-    return PlatformViewLink(
-      viewType: 'pdf_viewer_plugin',
-      surfaceFactory: (
-        BuildContext context,
-        PlatformViewController controller,
-      ) {
-        return AndroidViewSurface(
-          controller: controller as AndroidViewController,
-          gestureRecognizers: gestureRecognizers ??
-              const <Factory<OneSequenceGestureRecognizer>>{},
-          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-        );
-      },
-      onCreatePlatformView: (PlatformViewCreationParams params) {
-        return PlatformViewsService.initSurfaceAndroidView(
-          id: params.id,
-          viewType: 'pdf_viewer_plugin',
-          layoutDirection: TextDirection.rtl,
-          creationParams: MethodChannelPdfViewerPlatform.creationParamsToMap(
-            creationParams!,
-          ),
-          creationParamsCodec: const StandardMessageCodec(),
-        )
-          ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
-          ..addOnPlatformViewCreatedListener((int id) {})
-          ..create();
-      },
-    );
-  }
-}
-
 class PdfView extends StatefulWidget {
-  /// Creates a new web view.
+  /// Creates a new PdfView.
   const PdfView({
     Key? key,
     this.path,
@@ -90,10 +51,10 @@ class PdfView extends StatefulWidget {
     _platform = platform;
   }
 
-  /// The WebView platform that's used by this WebView.
+  /// The PdfView platform that's used by this PdfView.
   ///
   /// The default value is [AndroidPdfViewer] on Android and [CupertinoPdfViewer] on iOS.
-  static PdfViewerPlatform? get platform {
+  static PdfViewerPlatform get platform {
     if (_platform == null) {
       switch (defaultTargetPlatform) {
         case TargetPlatform.android:
@@ -104,20 +65,20 @@ class PdfView extends StatefulWidget {
           break;
         default:
           throw UnsupportedError(
-              "Trying to use the default webview implementation for $defaultTargetPlatform but there isn't a default one");
+              "Trying to use the default PdfView implementation for $defaultTargetPlatform but there isn't a default one");
       }
     }
-    return _platform;
+    return _platform!;
   }
 
-  /// Which gestures should be consumed by the web view.
+  /// Which gestures should be consumed by the PdfView.
   ///
-  /// It is possible for other gesture recognizers to be competing with the web view on pointer
-  /// events, e.g if the web view is inside a [ListView] the [ListView] will want to handle
-  /// vertical drags. The web view will claim gestures that are recognized by any of the
+  /// It is possible for other gesture recognizers to be competing with the Pdf View on pointer
+  /// events, e.g if the Pdf View is inside a [ListView] the [ListView] will want to handle
+  /// vertical drags. The Pdf View will claim gestures that are recognized by any of the
   /// recognizers on this list.
   ///
-  /// When this set is empty or null, the web view will only handle pointer events for gestures that
+  /// When this set is empty or null, the Pdf View will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
@@ -138,15 +99,15 @@ class PdfView extends StatefulWidget {
 class _PdfViewState extends State<PdfView> {
   @override
   Widget build(BuildContext context) {
-    return PdfView.platform!.build(
+    return PdfView.platform.build(
       context: context,
       gestureRecognizers: widget.gestureRecognizers,
-      creationParams: _creationParamsfromWidget(widget),
+      creationParams: _creationParamsFromWidget(widget),
     );
   }
 }
 
-CreationParams _creationParamsfromWidget(PdfView widget) {
+CreationParams _creationParamsFromWidget(PdfView widget) {
   return CreationParams(
     path: widget.path,
   );
