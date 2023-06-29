@@ -2,14 +2,14 @@ name: pdf_viewer_plugin_example
 description: Demonstrates how to use the pdf_viewer_plugin plugin.
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=3.0.5 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  path_provider: ^2.0.2
-  http: ^0.13.3
+  path_provider: ^2.0.15
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:
